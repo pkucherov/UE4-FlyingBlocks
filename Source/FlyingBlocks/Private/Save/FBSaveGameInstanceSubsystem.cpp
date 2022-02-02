@@ -3,6 +3,7 @@
 
 #include "Save/FBSaveGameInstanceSubsystem.h"
 
+#include "Blocks/BaseBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "Save/BlocksSaveGame.h"
 
@@ -15,11 +16,11 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 	TArray<AActor*> ActorsToFind;
 	if (UWorld* World = GetWorld())
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), ActorsToFind);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseBlock::StaticClass(), ActorsToFind);
 	}
 	for (AActor* block : ActorsToFind)
-
 	{
+
 	}
 
 
