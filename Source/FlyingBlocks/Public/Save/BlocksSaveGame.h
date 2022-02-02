@@ -31,10 +31,10 @@ struct FBlockDTO {
 	UPROPERTY() double Y;
 	UPROPERTY() double Z;
 
-	FBlockDTO() : X(0.0), Y(0.0), Z(0.0) {}
+	FBlockDTO() : BlockType(EBlockPosInAllBlocks::BaseBlock), X(0.0), Y(0.0), Z(0.0) {}
 };
 /**
- * 
+ *
  */
 UCLASS()
 class FLYINGBLOCKS_API UBlocksSaveGame : public USaveGame
@@ -43,5 +43,5 @@ class FLYINGBLOCKS_API UBlocksSaveGame : public USaveGame
 
 	UPROPERTY()
 	TArray<FBlockDTO> BlockDTOs;
-	
+
 };
