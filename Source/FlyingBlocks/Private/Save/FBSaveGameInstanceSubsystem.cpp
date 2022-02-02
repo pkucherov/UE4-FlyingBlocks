@@ -9,24 +9,29 @@
 
 void UFBSaveGameInstanceSubsystem::SaveGame()
 {
-	UBlocksSaveGame* blocksDTO = NewObject<UBlocksSaveGame>();
+	UBlocksSaveGame* blocksSaveGame = NewObject<UBlocksSaveGame>();
+
 	// get all blocks
-
-
 	TArray<AActor*> ActorsToFind;
 	if (UWorld* World = GetWorld())
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseBlock::StaticClass(), ActorsToFind);
 	}
-	for (AActor* block : ActorsToFind)
+
+	for (AActor* actor : ActorsToFind)
 	{
-
+		ABaseBlock* block = Cast<ABaseBlock>(actor);
+		if (block)
+		{
+			FVector location = block->GetActorLocation();
+			FBlockDTO blockDTO(EBlockPosInAllBlocks::BaseBlock, location);
+			blocksSaveGame->BlockDTOs.Add(blockDTO);
+		}
 	}
-
-
+	
 	// save
 	FString SlotName = "Default";
-	bool bSaved = UGameplayStatics::SaveGameToSlot(blocksDTO, SlotName, 0);
+	bool bSaved = UGameplayStatics::SaveGameToSlot(blocksSaveGame, SlotName, 0);
 }
 
 void UFBSaveGameInstanceSubsystem::LoadGame()

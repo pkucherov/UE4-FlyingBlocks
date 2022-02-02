@@ -27,11 +27,10 @@ struct FBlockDTO {
 	GENERATED_BODY()
 
 	UPROPERTY() EBlockPosInAllBlocks BlockType;
-	UPROPERTY() double X;
-	UPROPERTY() double Y;
-	UPROPERTY() double Z;
+	UPROPERTY() FVector Location;
 
-	FBlockDTO() : BlockType(EBlockPosInAllBlocks::BaseBlock), X(0.0), Y(0.0), Z(0.0) {}
+	FBlockDTO() : BlockType(EBlockPosInAllBlocks::BaseBlock), Location(0) {}
+	FBlockDTO(EBlockPosInAllBlocks BlType, const FVector& loc): BlockType(BlType), Location(loc) {}
 };
 /**
  *
@@ -41,6 +40,7 @@ class FLYINGBLOCKS_API UBlocksSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY()
 	TArray<FBlockDTO> BlockDTOs;
 
