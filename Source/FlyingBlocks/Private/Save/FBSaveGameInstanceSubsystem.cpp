@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Save/FBSaveGameInstanceSubsystem.h"
 
 #include "Blocks/BaseBlock.h"
@@ -36,5 +34,17 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 
 void UFBSaveGameInstanceSubsystem::LoadGame()
 {
+	if (UWorld* World = GetWorld())
+	{
+		FString SlotName = "Default";
+		UBlocksSaveGame* blocksSave = Cast<UBlocksSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
 
+		if (blocksSave)
+		{
+			for (FBlockDTO blockDTO : blocksSave->BlockDTOs)
+			{
+				//World->SpawnActor()
+			}
+		}
+	}
 }
