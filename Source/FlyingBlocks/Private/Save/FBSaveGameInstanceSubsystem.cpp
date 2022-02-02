@@ -11,6 +11,18 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 	UBlocksSaveGame* blocksDTO = NewObject<UBlocksSaveGame>();
 	// get all blocks
 
+
+	TArray<AActor*> ActorsToFind;
+	if (UWorld* World = GetWorld())
+	{
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), ActorsToFind);
+	}
+	for (AActor* block : ActorsToFind)
+
+	{
+	}
+
+
 	// save
 	FString SlotName = "Default";
 	bool bSaved = UGameplayStatics::SaveGameToSlot(blocksDTO, SlotName, 0);
