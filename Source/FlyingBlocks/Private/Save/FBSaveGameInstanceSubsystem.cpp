@@ -32,6 +32,7 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 	bool bSaved = UGameplayStatics::SaveGameToSlot(blocksSaveGame, SlotName, 0);
 }
 
+
 void UFBSaveGameInstanceSubsystem::LoadGame()
 {
 	if (UWorld* World = GetWorld())
