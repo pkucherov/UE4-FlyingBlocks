@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Save/FBSaveGameInstanceSubsystem.h"
 
+#include "FBGameMode.h"
 #include "Blocks/BaseBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "Save/BlocksSaveGame.h"
@@ -14,6 +15,11 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 	if (UWorld* World = GetWorld())
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseBlock::StaticClass(), ActorsToFind);
+		AFBGameMode* gameMode = Cast<AFBGameMode>(World->GetAuthGameMode());
+		if (gameMode)
+		{
+			FString baseBlockName = gameMode->BaseBlockBPClass->ClassDefaultObject->GetClass()->GetName();
+		}
 	}
 
 	for (AActor* actor : ActorsToFind)
@@ -21,6 +27,8 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 		ABaseBlock* block = Cast<ABaseBlock>(actor);
 		if (block)
 		{
+			FString className = actor->GetClass()->GetName();
+
 			FVector location = block->GetActorLocation();
 			FBlockDTO blockDTO(block->BlockType, location);
 			blocksSaveGame->BlockDTOs.Add(blockDTO);
