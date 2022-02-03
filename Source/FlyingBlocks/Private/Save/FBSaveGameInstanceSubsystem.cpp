@@ -22,7 +22,7 @@ void UFBSaveGameInstanceSubsystem::SaveGame()
 		if (block)
 		{
 			FVector location = block->GetActorLocation();
-			FBlockDTO blockDTO(EBlockPosInAllBlocks::BaseBlock, location);
+			FBlockDTO blockDTO(block->BlockType, location);
 			blocksSaveGame->BlockDTOs.Add(blockDTO);
 		}
 	}
@@ -43,6 +43,20 @@ void UFBSaveGameInstanceSubsystem::LoadGame()
 		{
 			for (FBlockDTO blockDTO : blocksSave->BlockDTOs)
 			{
+				switch(blockDTO.BlockType)
+				{
+				case EBlockPosInAllBlocks::BaseBlock: break;
+				case EBlockPosInAllBlocks::BrickBlock: break;
+				case EBlockPosInAllBlocks::DirtBlock: break;
+				case EBlockPosInAllBlocks::GrassBlock: break;
+				case EBlockPosInAllBlocks::WoodBlock: break;
+				case EBlockPosInAllBlocks::BlueBlock: break;
+				case EBlockPosInAllBlocks::GoldBlock: break;
+				case EBlockPosInAllBlocks::GreenBlock: break;
+				case EBlockPosInAllBlocks::PurpleBlock: break;
+				case EBlockPosInAllBlocks::RandomFlower: break;
+				default: ;
+				}
 				//World->SpawnActor()
 			}
 		}

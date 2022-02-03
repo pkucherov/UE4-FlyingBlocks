@@ -4,23 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Blocks/BaseBlock.h"
 #include "BlocksSaveGame.generated.h"
 
-
-UENUM()
-enum class EBlockPosInAllBlocks : uint8
-{
-	BaseBlock = 0,
-	BrickBlock = 1,
-	DirtBlock = 2,
-	GrassBlock = 3,
-	WoodBlock = 4,
-	BlueBlock = 5,
-	GoldBlock = 6,
-	GreenBlock = 7,
-	PurpleBlock = 8,
-	RandomFlower = 9,
-};
 
 USTRUCT()
 struct FBlockDTO {
