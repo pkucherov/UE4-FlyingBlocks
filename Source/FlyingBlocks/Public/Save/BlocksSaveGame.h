@@ -12,11 +12,11 @@ USTRUCT()
 struct FBlockDTO {
 	GENERATED_BODY()
 
-	UPROPERTY() EBlockPosInAllBlocks BlockType;
+	UPROPERTY() int BlockIndex;
 	UPROPERTY() FVector Location;
 
-	FBlockDTO() : BlockType(EBlockPosInAllBlocks::BaseBlock), Location(0) {}
-	FBlockDTO(EBlockPosInAllBlocks BlType, const FVector& loc): BlockType(BlType), Location(loc) {}
+	FBlockDTO() : BlockIndex(0), Location(0) {}
+	FBlockDTO(int BlIndex, const FVector& loc): BlockIndex(BlIndex), Location(loc) {}
 };
 /**
  *

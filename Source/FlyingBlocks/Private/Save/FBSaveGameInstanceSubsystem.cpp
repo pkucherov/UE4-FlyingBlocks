@@ -8,65 +8,70 @@
 
 void UFBSaveGameInstanceSubsystem::SaveGame()
 {
-	UBlocksSaveGame* blocksSaveGame = NewObject<UBlocksSaveGame>();
+	if (!GetWorld() || !Cast<AFBGameMode>(GetWorld()->GetAuthGameMode())) return;
+
+	const UWorld* World = GetWorld();
+	AFBGameMode* gameMode = Cast<AFBGameMode>(World->GetAuthGameMode());
+
+	TMap<FString, int>  MapBlockNamesToIndex;
+
+	for (int i = 0; i < gameMode->BlockBPClasses.Num(); i++)
+	{
+		const auto& Block = gameMode->BlockBPClasses[i];
+		const FString& BaseBlockName = Block->ClassDefaultObject->GetClass()->GetName();
+		MapBlockNamesToIndex.Add(BaseBlockName, i);
+	}
+
+	UBlocksSaveGame* BlocksSaveGame = NewObject<UBlocksSaveGame>();
 
 	// get all blocks
 	TArray<AActor*> ActorsToFind;
-	if (UWorld* World = GetWorld())
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseBlock::StaticClass(), ActorsToFind);
+
+	for (AActor* Actor : ActorsToFind)
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseBlock::StaticClass(), ActorsToFind);
-		AFBGameMode* gameMode = Cast<AFBGameMode>(World->GetAuthGameMode());
-		if (gameMode)
+		ABaseBlock* Block = Cast<ABaseBlock>(Actor);
+		if (Block)
 		{
-			FString baseBlockName = gameMode->BaseBlockBPClass->ClassDefaultObject->GetClass()->GetName();
+			FString ClassName = Actor->GetClass()->GetName();
+
+			const int* PtrIndex = MapBlockNamesToIndex.Find(ClassName);
+			if (PtrIndex)
+			{
+				const int Index = *PtrIndex;
+				FVector Location = Block->GetActorLocation();
+				FBlockDTO BlockDTO(Index, Location);
+				BlocksSaveGame->BlockDTOs.Add(BlockDTO);
+			}
 		}
 	}
 
-	for (AActor* actor : ActorsToFind)
-	{
-		ABaseBlock* block = Cast<ABaseBlock>(actor);
-		if (block)
-		{
-			FString className = actor->GetClass()->GetName();
-
-			FVector location = block->GetActorLocation();
-			FBlockDTO blockDTO(block->BlockType, location);
-			blocksSaveGame->BlockDTOs.Add(blockDTO);
-		}
-	}
-	
 	// save
-	FString SlotName = "Default";
-	bool bSaved = UGameplayStatics::SaveGameToSlot(blocksSaveGame, SlotName, 0);
+	const FString SlotName = "Default";
+	bool bSaved = UGameplayStatics::SaveGameToSlot(BlocksSaveGame, SlotName, 0);
 }
 
 
 void UFBSaveGameInstanceSubsystem::LoadGame()
 {
-	if (UWorld* World = GetWorld())
-	{
-		FString SlotName = "Default";
-		UBlocksSaveGame* blocksSave = Cast<UBlocksSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+	if (!GetWorld() || !Cast<AFBGameMode>(GetWorld()->GetAuthGameMode())) return;
 
-		if (blocksSave)
+	UWorld* World = GetWorld();
+	AFBGameMode* gameMode = Cast<AFBGameMode>(World->GetAuthGameMode());
+
+	const FString SlotName = "Default";
+	UBlocksSaveGame* BlocksSave = Cast<UBlocksSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+
+	if (BlocksSave)
+	{
+		for (FBlockDTO BlockDTO : BlocksSave->BlockDTOs)
 		{
-			for (FBlockDTO blockDTO : blocksSave->BlockDTOs)
+			const int i = BlockDTO.BlockIndex;
+			if (i >= 0 && i < gameMode->BlockBPClasses.Num())
 			{
-				switch(blockDTO.BlockType)
-				{
-				case EBlockPosInAllBlocks::BaseBlock: break;
-				case EBlockPosInAllBlocks::BrickBlock: break;
-				case EBlockPosInAllBlocks::DirtBlock: break;
-				case EBlockPosInAllBlocks::GrassBlock: break;
-				case EBlockPosInAllBlocks::WoodBlock: break;
-				case EBlockPosInAllBlocks::BlueBlock: break;
-				case EBlockPosInAllBlocks::GoldBlock: break;
-				case EBlockPosInAllBlocks::GreenBlock: break;
-				case EBlockPosInAllBlocks::PurpleBlock: break;
-				case EBlockPosInAllBlocks::RandomFlower: break;
-				default: ;
-				}
-				//World->SpawnActor()
+				const auto& Block = gameMode->BlockBPClasses[i];
+				World->SpawnActor(Block->ClassDefaultObject->GetClass(), &BlockDTO.Location);
 			}
 		}
 	}

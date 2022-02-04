@@ -14,6 +14,10 @@ class FLYINGBLOCKS_API UFBSaveGameInstanceSubsystem : public UGameInstanceSubsys
 {
 	GENERATED_BODY()
 public:
+
+	UFUNCTION(BlueprintCallable, Category = "Flying Blocks")
 	void SaveGame();
+
+	UFUNCTION(BlueprintCallable, Category = "Flying Blocks")
 	void LoadGame();
 };
