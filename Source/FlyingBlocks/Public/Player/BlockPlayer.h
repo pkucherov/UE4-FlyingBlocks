@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Flying Blocks")
 	void SetSpawnOnTouchState(bool bSpawn) { bSpawnBlock = bSpawn; }
 
+	UFUNCTION(BlueprintCallable, Category = "Flying Blocks")
+	bool GetSpawnOnTouchState() const { return bSpawnBlock; }
+
 private:
 	bool bSpawnBlock;
 
