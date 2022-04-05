@@ -4,7 +4,7 @@
 #include "Player/BlockPlayer.h"
 
 // Sets default values
-ABlockPlayer::ABlockPlayer(): bSpawnBlock(true)
+ABlockPlayer::ABlockPlayer(): TouchState(ETouchState::Move)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
