@@ -6,6 +6,14 @@
 #include "GameFramework/Character.h"
 #include "BlockPlayer.generated.h"
 
+UENUM(BlueprintType)
+enum class ETouchState: uint8
+{
+	Delete = 0,
+	Spawn = 1,
+	Move = 2
+};
+
 UCLASS()
 class FLYINGBLOCKS_API ABlockPlayer : public ACharacter
 {
@@ -27,12 +35,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Flying Blocks")
-	void SetSpawnOnTouchState(bool bSpawn) { bSpawnBlock = bSpawn; }
+	void SetSpawnOnTouchState(ETouchState State) { TouchState = State; }
 
 	UFUNCTION(BlueprintCallable, Category = "Flying Blocks")
-	bool GetSpawnOnTouchState() const { return bSpawnBlock; }
+	ETouchState GetSpawnOnTouchState() const { return TouchState; }
 
 private:
-	bool bSpawnBlock;
-
+	ETouchState TouchState;
 };
