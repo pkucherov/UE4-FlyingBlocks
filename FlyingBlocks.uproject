@@ -49,5 +49,13 @@
 				"Linux"
 			]
 		}
+	],
+	"TargetPlatforms": [
+		"Android",
+		"IOS",
+		"Linux",
+		"LinuxArm64",
+		"TVOS",
+		"Windows"
 	]
 }
